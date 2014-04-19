@@ -186,6 +186,14 @@ public class EJTMTFormComponent implements EJTMTApplicationComponent, EJTMTAppCo
             // TODO Auto-generated method stub
             return form;
         }
+        
+        @Override
+        public void activate()
+        {
+            super.activate();
+            form.getFormController().getRenderer().gainInitialFocus();
+            form.focusGained();
+        }
 
     }
 }

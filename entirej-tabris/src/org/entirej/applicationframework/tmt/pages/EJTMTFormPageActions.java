@@ -22,6 +22,8 @@ import org.entirej.applicationframework.tmt.application.launcher.EJTMTContext;
 import org.entirej.applicationframework.tmt.pages.EJTMTFormPage.FormActionConfiguration;
 import org.entirej.framework.core.enumerations.EJScreenType;
 
+import com.eclipsesource.tabris.ui.PageConfiguration;
+
 public class EJTMTFormPageActions
 {
 
@@ -33,6 +35,7 @@ public class EJTMTFormPageActions
     public static void setActionEnableByPageId(String pageid, String actionCommand, boolean enable)
     {
         EJTMTContext.getTabrisUI().getActionOperator().setActionEnabled(FormActionConfiguration.toActionId(pageid, actionCommand), enable);
+
     }
 
     public static void setActionEnableByFormId(String formid, String actionCommand, boolean enable)
