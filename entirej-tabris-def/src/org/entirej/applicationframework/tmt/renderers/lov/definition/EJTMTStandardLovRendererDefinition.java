@@ -252,7 +252,7 @@ public class EJTMTStandardLovRendererDefinition implements EJDevLovRendererDefin
                     }
                 });
                 
-                EJFrameworkExtensionProperties blockRequiredItemProperties = ((EJDevMainScreenItemDisplayProperties)item).getBlockRendererRequiredProperties();
+                EJFrameworkExtensionProperties blockRequiredItemProperties = ((EJDevMainScreenItemDisplayProperties)item).getLovRendererRequiredProperties();
 
                 EJTMTRowTemplateLayout.RowTemplateData data = new EJTMTRowTemplateLayout.RowTemplateData();
                 
