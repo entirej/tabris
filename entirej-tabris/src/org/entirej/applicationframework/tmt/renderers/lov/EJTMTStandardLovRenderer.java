@@ -769,6 +769,7 @@ public class EJTMTStandardLovRenderer implements EJLovRenderer
                 }
 
             }
+            return labelProvider;
         }
         return null;
     }
