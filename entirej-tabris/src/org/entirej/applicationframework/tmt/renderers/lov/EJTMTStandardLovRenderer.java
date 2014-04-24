@@ -199,10 +199,9 @@ public class EJTMTStandardLovRenderer implements EJLovRenderer
                 EJFrameworkExtensionProperties rendererProp = _lovController.getDefinitionProperties().getLovRendererProperties();
                 int style = SWT.VIRTUAL | SWT.H_SCROLL | SWT.V_SCROLL;
 
-                if (rendererProp.getBooleanProperty(EJTMTMultiRecordBlockDefinitionProperties.ROW_SELECTION, true))
-                {
+               
                     style = style | SWT.FULL_SELECTION;
-                }
+                
               
 
                 final EJTMTAbstractFilteredTable filterTree;

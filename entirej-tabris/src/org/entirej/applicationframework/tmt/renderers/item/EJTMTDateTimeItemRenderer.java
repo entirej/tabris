@@ -47,6 +47,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
@@ -632,7 +633,7 @@ public class EJTMTDateTimeItemRenderer implements EJTMTAppItemRenderer, FocusLis
                 @Override
                 public Control createActionLabel(Composite parent)
                 {
-                    Label label = new Label(parent, SWT.NONE);
+                    Button label = new Button(parent, SWT.NONE);
                     label.setImage(EJTMTImageRetriever.get(EJTMTImageRetriever.IMG_FIND_LOV));
                     label.addFocusListener(EJTMTDateTimeItemRenderer.this);
                     label.addMouseListener(new MouseListener()
