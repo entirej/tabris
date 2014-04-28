@@ -821,14 +821,17 @@ public class EJTMTTextItemRenderer implements EJTMTAppItemRenderer, FocusListene
             }
             _mandatoryDecoration.hide();
             _textField.addModifyListener(_modifyListener);
-            _textField.addVerifyListener(new VerifyListener()
+            if(_valueCase!=null && _valueCase!= VALUE_CASE.DEFAULT)
             {
-                @Override
-                public void verifyText(VerifyEvent event)
+                _textField.addVerifyListener(new VerifyListener()
                 {
-                    event.text = toCaseValue(event.text);
-                }
-            });
+                    @Override
+                    public void verifyText(VerifyEvent event)
+                    {
+                        event.text = toCaseValue(event.text);
+                    }
+                });
+            }
             setInitialValue(_baseValue);
         }
     }
