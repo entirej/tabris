@@ -482,6 +482,20 @@ public class EJTMTTextItemRenderer implements EJTMTAppItemRenderer, FocusListene
     public void setMandatory(boolean mandatory)
     {
         _mandatory = mandatory;
+        
+        if(controlState(_textField))
+        {
+            if(_mandatory)
+            {
+                _textField.setMessage("Required*");
+            }
+            else
+            {
+                _textField.setMessage("");
+            }
+        }
+        
+        
         setMandatoryBorder(mandatory);
     }
 
@@ -544,6 +558,7 @@ public class EJTMTTextItemRenderer implements EJTMTAppItemRenderer, FocusListene
         if (req && getValue() == null)
         {
             _mandatoryDecoration.show();
+            
         }
         else
         {
@@ -807,11 +822,12 @@ public class EJTMTTextItemRenderer implements EJTMTAppItemRenderer, FocusListene
 
             _textField.setData(_item.getReferencedItemProperties().getName());
             _textField.addFocusListener(this);
+            
 
             _mandatoryDecoration = new ControlDecoration(_actionControl, SWT.TOP | SWT.LEFT);
             _errorDecoration = new ControlDecoration(_actionControl, SWT.TOP | SWT.LEFT);
-            _errorDecoration.setImage(getDecorationImage(FieldDecorationRegistry.DEC_ERROR));
-            _mandatoryDecoration.setImage(getDecorationImage(FieldDecorationRegistry.DEC_REQUIRED));
+            _errorDecoration.setImage(EJTMTImageRetriever.get(EJTMTImageRetriever.IMG_ERROR_OVR));
+            _mandatoryDecoration.setImage(EJTMTImageRetriever.get(EJTMTImageRetriever.IMG_REQUIRED_OVR));
             _mandatoryDecoration.setShowHover(true);
             _mandatoryDecoration.setDescriptionText(_screenItemProperties.getLabel() == null || _screenItemProperties.getLabel().isEmpty() ? "Required Item"
                     : String.format("%s is required", _screenItemProperties.getLabel()));

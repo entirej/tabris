@@ -428,6 +428,7 @@ public class EJTMTComboItemRenderer implements EJTMTAppItemRenderer, FocusListen
     public void setMandatory(boolean mandatory)
     {
         _mandatory = mandatory;
+
         setMandatoryBorder(mandatory);
     }
 
@@ -739,8 +740,8 @@ public class EJTMTComboItemRenderer implements EJTMTAppItemRenderer, FocusListen
 
         _mandatoryDecoration = new ControlDecoration(_actionControl, SWT.TOP | SWT.LEFT);
         _errorDecoration = new ControlDecoration(_actionControl, SWT.TOP | SWT.LEFT);
-        _errorDecoration.setImage(getDecorationImage(FieldDecorationRegistry.DEC_ERROR));
-        _mandatoryDecoration.setImage(getDecorationImage(FieldDecorationRegistry.DEC_REQUIRED));
+        _errorDecoration.setImage(EJTMTImageRetriever.get(EJTMTImageRetriever.IMG_ERROR_OVR));
+        _mandatoryDecoration.setImage(EJTMTImageRetriever.get(EJTMTImageRetriever.IMG_REQUIRED_OVR));
         _mandatoryDecoration.setShowHover(true);
         _mandatoryDecoration.setDescriptionText(_screenItemProperties.getLabel() == null || _screenItemProperties.getLabel().isEmpty() ? "Required Item"
                 : String.format("%s is required", _screenItemProperties.getLabel()));
@@ -796,11 +797,7 @@ public class EJTMTComboItemRenderer implements EJTMTAppItemRenderer, FocusListen
         return style;
     }
 
-    private Image getDecorationImage(String image)
-    {
-        FieldDecorationRegistry registry = FieldDecorationRegistry.getDefault();
-        return registry.getFieldDecoration(image).getImage();
-    }
+  
 
     @Override
     public void createLable(Composite composite)

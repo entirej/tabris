@@ -48,6 +48,8 @@ public class EJTMTImageRetriever
     public static final String                 IMG_WARNING          = ICONS + "warning.png";
     public static final String                 IMG_ERROR            = ICONS + "error.png";
     public static final String                 IMG_CLOSE            = ICONS + "close.png";
+    public static final String                 IMG_ERROR_OVR        = ICONS + "error_ovr.png";
+    public static final String                 IMG_REQUIRED_OVR     = ICONS + "required_ovr.png";
 
     private EJTMTImageRetriever()
     {
@@ -69,9 +71,6 @@ public class EJTMTImageRetriever
         return image;
     }
 
-   
-   
-
     public static float getAvgCharWidth(Font font)
     {
         return EJTMTUtils.getAvgCharWidth(font);
@@ -87,7 +86,5 @@ public class EJTMTImageRetriever
         ClassLoader loader = EJTMTImageRetriever.class.getClassLoader();
         return EJTMTUtils.getImage(name, loader);
     }
-
-    
 
 }

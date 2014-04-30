@@ -24,7 +24,6 @@ package org.entirej.applicationframework.tmt.renderers.item;
 import java.math.BigDecimal;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
-import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.rap.rwt.template.Cell;
 import org.eclipse.rap.rwt.template.ImageCell;
@@ -302,8 +301,8 @@ public class EJTMTCheckBoxItemRenderer extends EJTMTButtonItemRenderer
 
         _mandatoryDecoration = new ControlDecoration(_button, SWT.TOP | SWT.LEFT);
         _errorDecoration = new ControlDecoration(_button, SWT.TOP | SWT.LEFT);
-        _errorDecoration.setImage(getDecorationImage(FieldDecorationRegistry.DEC_ERROR));
-        _mandatoryDecoration.setImage(getDecorationImage(FieldDecorationRegistry.DEC_REQUIRED));
+        _errorDecoration.setImage(EJTMTImageRetriever.get(EJTMTImageRetriever.IMG_ERROR_OVR));
+        _mandatoryDecoration.setImage(EJTMTImageRetriever.get(EJTMTImageRetriever.IMG_REQUIRED_OVR));
         _mandatoryDecoration.setShowHover(true);
         _mandatoryDecoration.setDescriptionText(_screenItemProperties.getLabel() == null || _screenItemProperties.getLabel().isEmpty() ? "Required Item"
                 : String.format("%s is required", _screenItemProperties.getLabel()));
@@ -359,11 +358,7 @@ public class EJTMTCheckBoxItemRenderer extends EJTMTButtonItemRenderer
     {
     }
 
-    private Image getDecorationImage(String image)
-    {
-        FieldDecorationRegistry registry = FieldDecorationRegistry.getDefault();
-        return registry.getFieldDecoration(image).getImage();
-    }
+  
 
     @Override
     public boolean isMandatory()

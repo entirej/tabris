@@ -48,6 +48,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.entirej.applicationframework.tmt.application.EJTMTImageRetriever;
 import org.entirej.applicationframework.tmt.renderer.interfaces.EJTMTAppItemRenderer;
 import org.entirej.applicationframework.tmt.renderers.item.definition.interfaces.EJTMTRadioButtonItemRendererDefinitionProperties;
 import org.entirej.applicationframework.tmt.table.EJTMTAbstractTableSorter;
@@ -556,8 +557,8 @@ public class EJTMTRadioGroupItemRenderer implements EJTMTAppItemRenderer, FocusL
 
         _mandatoryDecoration = new ControlDecoration(_radioGroup, SWT.TOP | SWT.LEFT);
         _errorDecoration = new ControlDecoration(_radioGroup, SWT.TOP | SWT.LEFT);
-        _errorDecoration.setImage(getDecorationImage(FieldDecorationRegistry.DEC_ERROR));
-        _mandatoryDecoration.setImage(getDecorationImage(FieldDecorationRegistry.DEC_REQUIRED));
+        _errorDecoration.setImage(EJTMTImageRetriever.get(EJTMTImageRetriever.IMG_ERROR_OVR));
+        _mandatoryDecoration.setImage(EJTMTImageRetriever.get(EJTMTImageRetriever.IMG_REQUIRED_OVR));
         _mandatoryDecoration.setShowHover(true);
         _mandatoryDecoration.setDescriptionText(_screenItemProperties.getLabel() == null || _screenItemProperties.getLabel().isEmpty() ? "Required Item"
                 : String.format("%s is required", _screenItemProperties.getLabel()));
@@ -569,11 +570,7 @@ public class EJTMTRadioGroupItemRenderer implements EJTMTAppItemRenderer, FocusL
         addListeners();
     }
 
-    private Image getDecorationImage(String image)
-    {
-        FieldDecorationRegistry registry = FieldDecorationRegistry.getDefault();
-        return registry.getFieldDecoration(image).getImage();
-    }
+
 
     @Override
     public void createLable(Composite composite)
