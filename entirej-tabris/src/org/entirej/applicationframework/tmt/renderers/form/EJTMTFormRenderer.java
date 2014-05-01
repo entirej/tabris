@@ -74,6 +74,7 @@ import com.eclipsesource.tabris.ui.PageData;
 import com.eclipsesource.tabris.ui.PageStyle;
 import com.eclipsesource.tabris.ui.UI;
 import com.eclipsesource.tabris.ui.UIConfiguration;
+import com.eclipsesource.tabris.widgets.enhancement.Widgets;
 import com.eclipsesource.tabris.widgets.swipe.Swipe;
 import com.eclipsesource.tabris.widgets.swipe.SwipeContext;
 import com.eclipsesource.tabris.widgets.swipe.SwipeItem;
@@ -282,12 +283,12 @@ public class EJTMTFormRenderer implements EJTMTAppFormRenderer
         {
             for (EJCanvasProperties popupCanvas : canvasProperties.getPopupCanvasContainer().getAllCanvasProperties())
             {
-                
+
                 if (setFocus(popupCanvas))
                 {
                     return true;
                 }
-                
+
             }
         }
 
@@ -413,6 +414,7 @@ public class EJTMTFormRenderer implements EJTMTAppFormRenderer
                 canvasController.tabPageChanged(name, (String) folder.getSelection()[0].getData("TAB_KEY"));
             }
         });
+        Widgets.onTabFolder(tabFolder.folder).usePaging();
         _tabFolders.put(name, tabFolder);
         folder.setLayoutData(createCanvasGridData(canvasProperties));
 
@@ -637,9 +639,9 @@ public class EJTMTFormRenderer implements EJTMTAppFormRenderer
                     public Control load(Composite parent)
                     {
                         Composite body = new Composite(parent, SWT.NONE);
-                        
-                        GridLayoutFactory.fillDefaults().margins( 0, 0 ).applyTo( body );
-                       
+
+                        GridLayoutFactory.fillDefaults().margins(0, 0).applyTo(body);
+
                         switch (containedCanvas.getType())
                         {
                             case BLOCK:
@@ -755,7 +757,7 @@ public class EJTMTFormRenderer implements EJTMTAppFormRenderer
                 public void createBody(Composite parent)
                 {
                     parent.setLayout(new FillLayout());
-                    final ScrolledComposite scrollComposite = new ScrolledComposite(parent, SWT.V_SCROLL );
+                    final ScrolledComposite scrollComposite = new ScrolledComposite(parent, SWT.V_SCROLL);
 
                     EJTMTEntireJGridPane _mainPane = new EJTMTEntireJGridPane(scrollComposite, numCols);
                     _mainPane.cleanLayout();
@@ -786,7 +788,7 @@ public class EJTMTFormRenderer implements EJTMTAppFormRenderer
                 {
                     setFocus(canvasProperties);
                 }
-                
+
                 private void addExtraButton(Composite parent, String label, int id)
                 {
                     if (label == null || label.length() == 0)
@@ -813,7 +815,7 @@ public class EJTMTFormRenderer implements EJTMTAppFormRenderer
                     {
                         // configuration.removePageConfiguration(pageID);
                     }
-                    
+
                 }
 
                 @Override
@@ -855,7 +857,7 @@ public class EJTMTFormRenderer implements EJTMTAppFormRenderer
             {
                 PageConfiguration pageConfiguration = new PageConfiguration(pageID, EJTMTScreenPage.class).setTitle(pageTitle != null ? pageTitle : "");
                 pageConfiguration.setStyle(PageStyle.DEFAULT);
-                
+
                 EJTMTApplicationContainer.addFormActions(_form, _form.getProperties(), pageID, pageConfiguration);
                 configuration.addPageConfiguration(pageConfiguration);
 
