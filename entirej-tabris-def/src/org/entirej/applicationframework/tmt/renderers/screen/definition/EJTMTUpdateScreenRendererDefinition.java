@@ -74,7 +74,6 @@ public class EJTMTUpdateScreenRendererDefinition extends EJTMTScreenRendererDefi
 
         Composite screen = new Composite(parent, SWT.SHADOW_NONE);
 
-        formToolkit.adapt(screen);
 
         GridLayout gridLayout = new GridLayout();
         gridLayout.numColumns = numcols;
