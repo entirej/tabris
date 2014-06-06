@@ -277,7 +277,7 @@ public class EJTMTImageItemRenderer implements EJTMTAppItemRenderer, FocusListen
                         throw new IllegalArgumentException(message.getMessage());
                     }
                 }
-                if (value instanceof URL)
+                else  if (value instanceof URL)
                 {
                     _currentImage = ImageDescriptor.createFromURL((URL) value).createImage();
                 }
