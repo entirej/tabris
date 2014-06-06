@@ -587,12 +587,25 @@ public class EJTMTSingleRecordBlockRenderer implements EJTMTAppBlockRenderer, Ke
 
         hookFocusListener(_mainPane);
         _mainPane.cleanLayout();
+        EJDataRecord registeredRecord = _mainItemRegister.getRegisteredRecord();
+        _mainItemRegister.resetRegister();
 
         EJItemGroupPropertiesContainer container = blockProperties.getScreenItemGroupContainer(EJScreenType.MAIN);
         Collection<EJItemGroupProperties> itemGroupProperties = container.getAllItemGroupProperties();
         for (EJItemGroupProperties ejItemGroupProperties : itemGroupProperties)
         {
             createItemGroup(_mainPane, ejItemGroupProperties);
+        }
+        
+        _mainItemRegister.clearRegisteredValues();
+        if(registeredRecord ==null)
+        {
+            registeredRecord = getFirstRecord();
+        }
+        if(registeredRecord!=null)
+        {
+
+            _mainItemRegister.register(registeredRecord);
         }
         _mainPane.addMouseListener(new MouseAdapter()
         {
