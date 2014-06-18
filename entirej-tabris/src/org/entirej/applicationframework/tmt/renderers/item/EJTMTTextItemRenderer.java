@@ -45,6 +45,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.entirej.applicationframework.tmt.application.EJTMTImageRetriever;
@@ -538,6 +539,7 @@ public class EJTMTTextItemRenderer implements EJTMTAppItemRenderer, FocusListene
     {
         if (!_textField.isFocusControl())
         {
+            _valueChanged = false;
             _item.itemValueChaged();
         }
         else
@@ -579,13 +581,23 @@ public class EJTMTTextItemRenderer implements EJTMTAppItemRenderer, FocusListene
     @Override
     public void focusLost(FocusEvent event)
     {
-        if (_valueChanged)
+        Display.getCurrent().asyncExec(new Runnable()
         {
-            _valueChanged = false;
-            _item.itemValueChaged();
-            setMandatoryBorder(_mandatory);
-            _item.itemFocusLost();
-        }
+            
+            @Override
+            public void run()
+            {
+                if (_valueChanged)
+                {
+                    _valueChanged = false;
+                    _item.itemValueChaged();
+                    setMandatoryBorder(_mandatory);
+                    
+                }
+                _item.itemFocusLost();
+                
+            }
+        });
     }
 
     @Override
