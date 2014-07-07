@@ -34,6 +34,7 @@ import org.entirej.framework.core.EJMessage;
 import org.entirej.framework.core.EJParameterList;
 import org.entirej.framework.core.EJTranslatorHelper;
 import org.entirej.framework.core.data.controllers.EJApplicationLevelParameter;
+import org.entirej.framework.core.data.controllers.EJEmbeddedFormController;
 import org.entirej.framework.core.data.controllers.EJInternalQuestion;
 import org.entirej.framework.core.data.controllers.EJPopupFormController;
 import org.entirej.framework.core.data.controllers.EJQuestion;
@@ -135,6 +136,20 @@ public class EJTMTApplicationManager implements EJApplicationManager, Serializab
         }
         return form;
     }
+    
+    
+
+    public void openEmbeddedForm(EJEmbeddedFormController embeddedController)
+    {
+        embeddedController.getCallingForm().getRenderer().openEmbeddedForm(embeddedController);
+    }
+    
+ 
+    public void closeEmbeddedForm(EJEmbeddedFormController embeddedController)
+    {
+        embeddedController.getCallingForm().getRenderer().closeEmbeddedForm(embeddedController);
+    }
+
 
     public EJInternalForm createEmbeddedForm(String formName, Composite parent)
     {
