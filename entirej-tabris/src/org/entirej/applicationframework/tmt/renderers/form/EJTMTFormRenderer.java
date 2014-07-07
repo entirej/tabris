@@ -145,6 +145,13 @@ public class EJTMTFormRenderer implements EJTMTAppFormRenderer
             handler.open();
         }
     }
+    
+    @Override
+    public void openFormInCanvas(String arg0, EJInternalForm arg1)
+    {
+        throw new IllegalAccessError("Not support yet");
+        
+    }
 
     @Override
     public void closePopupCanvas(String canvasName)
