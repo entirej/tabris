@@ -23,6 +23,7 @@ import java.io.Serializable;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.template.Cell;
 import org.eclipse.rap.rwt.template.Template;
 import org.eclipse.rap.rwt.template.TextCell;
@@ -410,6 +411,7 @@ public class EJTMTLabelItemRenderer implements EJTMTAppItemRenderer, FocusListen
         if (!_displayAsHyperlink)
         {
             final Label labelField = new Label(composite, style);
+            labelField.setData(RWT.MARKUP_ENABLED,_rendererProps.getBooleanProperty("HTML_FORMAT", false));
 
             String pictureName = _rendererProps.getStringProperty(EJTMTLabelItemRendererDefinitionProperties.PROPERTY_PICTURE);
 

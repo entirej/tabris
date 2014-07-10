@@ -49,6 +49,9 @@ public class EJTMTLabelItemRendererDefinition implements EJDevItemRendererDefini
     public static final String PROPERTY_PICTURE              = "PICTURE";
     public static final String PROPERTY_DISPLAY_AS_HYPERLINK = "DISPLAY_AS_HYPERLINK";
     public static final String PROPERTY_TEXT_WRAP            = "WRAP";
+    
+
+    public static final String PROPERTY_HTML_FORMAT          = "HTML_FORMAT";
 
     public EJTMTLabelItemRendererDefinition()
     {
@@ -108,10 +111,18 @@ public class EJTMTLabelItemRendererDefinition implements EJDevItemRendererDefini
         pic.setLabel("Picture");
         pic.setDescription("It is possible to display an image in a label renderer. See also: Image Item Renderer");
         
+        
+        
+        EJDevPropertyDefinition htmlFormat = new EJDevPropertyDefinition(PROPERTY_HTML_FORMAT, EJPropertyDefinitionType.BOOLEAN);
+        htmlFormat.setLabel("XHTML Formatting");
+        htmlFormat.setDescription("If this property is set, the Label formats certain XHTML tags ");
+        
+        
         mainGroup.addPropertyDefinition(displayAsHyperlink);
         mainGroup.addPropertyDefinition(textCase);
         mainGroup.addPropertyDefinition(textAlignment);
         mainGroup.addPropertyDefinition(textWrap);
+        mainGroup.addPropertyDefinition(htmlFormat);
         mainGroup.addPropertyDefinition(pic);
 
         return mainGroup;
