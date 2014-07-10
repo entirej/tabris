@@ -31,8 +31,10 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.entirej.applicationframework.tmt.application.EJTMTImageRetriever;
 import org.entirej.applicationframework.tmt.layout.EJTMTEntireJGridPane;
 import org.entirej.applicationframework.tmt.renderer.interfaces.EJTMTAppBlockRenderer;
@@ -68,6 +70,9 @@ import org.entirej.framework.core.renderers.interfaces.EJUpdateScreenRenderer;
 import org.entirej.framework.core.renderers.registry.EJMainScreenItemRendererRegister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.eclipsesource.tabris.widgets.ClientDialog;
+import com.eclipsesource.tabris.widgets.ClientDialog.ButtonType;
 
 public class EJTMTSingleRecordBlockRenderer implements EJTMTAppBlockRenderer, KeyListener
 {
@@ -234,20 +239,30 @@ public class EJTMTSingleRecordBlockRenderer implements EJTMTAppBlockRenderer, Ke
     }
 
     @Override
-    public void askToDeleteRecord(EJDataRecord recordToDelete, String msg)
+    public void askToDeleteRecord(final EJDataRecord recordToDelete, String msg)
     {
         if (msg == null)
         {
             msg = "Are you sure you want to delete the current record?";
         }
-        EJMessage message = new EJMessage(msg);
-        EJQuestion question = new EJQuestion(new EJForm(_block.getForm()), "DELETE_RECORD", "Delete", message, "Yes", "No", recordToDelete);
-        _block.getForm().getMessenger().askQuestion(question);
-        if (EJQuestionButton.ONE == question.getAnswer())
+        ClientDialog hintDialog = new ClientDialog();
+        
+        hintDialog.setTitle("Delete");
+        hintDialog.setMessage(msg);
+        
+        hintDialog.setButton(ButtonType.OK, "Yes", new Listener()
         {
-            _block.getBlock().deleteRecord(recordToDelete);
-        }
-        _block.setRendererFocus(true);
+            
+            @Override
+            public void handleEvent(Event event)
+            {
+                _block.getBlock().deleteRecord(recordToDelete);
+                _block.setRendererFocus(true);
+                
+            }
+        });
+        hintDialog.setButton(ButtonType.CANCEL, "No");
+        hintDialog.open();
 
     }
 

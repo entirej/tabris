@@ -18,25 +18,27 @@
  ******************************************************************************/
 package org.entirej.applicationframework.tmt.application;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
-import org.entirej.applicationframework.tmt.notifications.EJTMTNotifierDialog;
 import org.entirej.framework.core.EJApplicationException;
 import org.entirej.framework.core.EJMessage;
 import org.entirej.framework.core.data.controllers.EJInternalQuestion;
 import org.entirej.framework.core.data.controllers.EJQuestion;
 import org.entirej.framework.core.enumerations.EJQuestionButton;
 import org.entirej.framework.core.interfaces.EJMessenger;
-import org.entirej.framework.core.properties.EJCoreProperties;
-import org.entirej.framework.core.properties.definitions.interfaces.EJFrameworkExtensionProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.eclipsesource.tabris.widgets.ClientDialog;
+import com.eclipsesource.tabris.widgets.ClientDialog.ButtonType;
+import com.eclipsesource.tabris.widgets.ClientDialog.Severity;
 
 public class EJTMTMessenger implements EJMessenger
 {
@@ -51,28 +53,44 @@ public class EJTMTMessenger implements EJMessenger
     @Override
     public void handleMessage(EJMessage message)
     {
-        Shell shell = manager.getShell();
         switch (message.getLevel())
         {
             case DEBUG:
                 logger.debug(message.getMessage());
                 break;
             case HINT:
-                MessageDialog.openInformation(shell, "Hint", message.getMessage());
+                
+                ClientDialog hintDialog = new ClientDialog();
+                hintDialog.setTitle("Hint");
+                hintDialog.setMessage(message.getMessage());
+                hintDialog.setButton(ClientDialog.ButtonType.OK, "OK");
+                hintDialog.open();
                 break;
                
             case MESSAGE:
-
-                MessageDialog.openInformation(shell, "Message", message.getMessage());
+                ClientDialog msgDialog = new ClientDialog();
+                msgDialog.setTitle("Message");
+                msgDialog.setMessage(message.getMessage());
+                msgDialog.setButton(ClientDialog.ButtonType.OK, "OK");
+                msgDialog.open();
                 break;
             case WARNING:
 
-                MessageDialog.openWarning(shell, "Warning", message.getMessage());
-
+                
+                ClientDialog warnDialog = new ClientDialog();
+                warnDialog.setTitle("Warning");
+                warnDialog.setMessage(message.getMessage());
+                warnDialog.setButton(ClientDialog.ButtonType.OK, "OK");
+                warnDialog.setSeverity(Severity.WARNING);
+                warnDialog.open();
                 break;
             case ERROR:
-                MessageDialog.openWarning(shell, "Error", message.getMessage());
-
+                ClientDialog errorDialog = new ClientDialog();
+                errorDialog.setTitle("Error");
+                errorDialog.setMessage(message.getMessage());
+                errorDialog.setButton(ClientDialog.ButtonType.OK, "OK");
+                errorDialog.setSeverity(Severity.ERROR);
+                errorDialog.open();
                 break;
             default:
                 System.out.println(message.getMessage());
@@ -101,7 +119,7 @@ public class EJTMTMessenger implements EJMessenger
      *            The question to be asked
      */
     @Override
-    public void askQuestion(EJQuestion question)
+    public void askQuestion(final EJQuestion question)
     {
         EJQuestionButton[] optionsButtons = getOptions(question);
         String[] options = new String[optionsButtons.length];
@@ -109,14 +127,43 @@ public class EJTMTMessenger implements EJMessenger
         {
             options[i] = question.getButtonText(optionsButtons[i]);
         }
-        MessageDialog dialog = new MessageDialog(manager.getShell(), question.getTitle(), null, question.getMessageText(), MessageDialog.QUESTION, options, 2);
-        int answer = dialog.open();
-
-        if (answer > -1)
+        
+        ClientDialog hintDialog = new ClientDialog();
+        
+        hintDialog.setTitle(question.getTitle());
+        hintDialog.setMessage(question.getMessageText());
+        for (int i = 0; i < optionsButtons.length; i++)
         {
-            question.setAnswer(optionsButtons[answer]);
-            question.getActionProcessor().questionAnswered(question);
+            final EJQuestionButton button = optionsButtons[i];
+            options[i] = question.getButtonText(button);
+            ButtonType type  = ButtonType.OK;;
+            switch (button)
+            {
+                case ONE:
+                    type = ButtonType.OK;
+                    break;
+                case TWO:
+                    type = ButtonType.NEUTRAL;
+                    break;
+                case THREE:
+                    type = ButtonType.CANCEL;
+                    break;
+
+            }
+            hintDialog.setButton(type, question.getButtonText(button), new Listener()
+            {
+                
+                @Override
+                public void handleEvent(Event event)
+                {
+                    question.setAnswer(button);
+                    question.getActionProcessor().questionAnswered(question);
+                    
+                }
+            });
         }
+       
+        hintDialog.open();
     }
 
     private EJQuestionButton[] getOptions(EJQuestion question)
