@@ -138,6 +138,17 @@ public class EJTMTMultiRecordBlockDefinition implements EJDevBlockRendererDefini
         rowSelaction.setDefaultValue("true");
 
         
+        EJDevPropertyDefinition pullRefreshmsg = new EJDevPropertyDefinition(EJTMTMultiRecordBlockDefinitionProperties.PULL_REFRESH_MESSAGE,
+                EJPropertyDefinitionType.STRING);
+        pullRefreshmsg.setLabel("Pull-Refresh Message");
+        pullRefreshmsg.setDescription("Add a message that will be shown when a user Pull-Refresh in Block");
+        
+        EJDevPropertyDefinition pullRefreshActionCommand = new EJDevPropertyDefinition(EJTMTMultiRecordBlockDefinitionProperties.PULL_REFRESH_ACTION,
+                EJPropertyDefinitionType.ACTION_COMMAND);
+        pullRefreshActionCommand.setLabel("Pull-Refresh Action Command");
+        pullRefreshActionCommand.setDescription("Add an action command that will be sent to the action processor when a user Pull-Refresh in Block");
+        
+        
         EJDevPropertyDefinition selectionActionCommand = new EJDevPropertyDefinition(EJTMTMultiRecordBlockDefinitionProperties.ROW_SELECTION_ACTION,
                 EJPropertyDefinitionType.ACTION_COMMAND);
         selectionActionCommand.setLabel("Selection Action Command");
@@ -157,6 +168,8 @@ public class EJTMTMultiRecordBlockDefinition implements EJDevBlockRendererDefini
         mainGroup.addPropertyDefinition(rowHeight);
         mainGroup.addPropertyDefinition(rowSelaction);
         mainGroup.addPropertyDefinition(selectionActionCommand);
+        mainGroup.addPropertyDefinition(pullRefreshActionCommand);
+        mainGroup.addPropertyDefinition(pullRefreshmsg);
 
         return mainGroup;
     }

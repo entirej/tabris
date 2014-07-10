@@ -48,6 +48,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
@@ -66,14 +67,11 @@ import org.entirej.applicationframework.tmt.renderers.screen.EJTMTUpdateScreenRe
 import org.entirej.applicationframework.tmt.table.EJTMTAbstractFilteredTable;
 import org.entirej.applicationframework.tmt.table.EJTMTAbstractFilteredTable.FilteredContentProvider;
 import org.entirej.applicationframework.tmt.table.EJTMTTableViewerColumnFactory;
-import org.entirej.framework.core.EJForm;
 import org.entirej.framework.core.EJMessage;
 import org.entirej.framework.core.data.EJDataRecord;
 import org.entirej.framework.core.data.controllers.EJEditableBlockController;
-import org.entirej.framework.core.data.controllers.EJQuestion;
 import org.entirej.framework.core.enumerations.EJManagedBlockProperty;
 import org.entirej.framework.core.enumerations.EJManagedScreenProperty;
-import org.entirej.framework.core.enumerations.EJQuestionButton;
 import org.entirej.framework.core.enumerations.EJScreenType;
 import org.entirej.framework.core.interfaces.EJScreenItemController;
 import org.entirej.framework.core.internal.EJInternalEditableBlock;
@@ -90,8 +88,12 @@ import org.entirej.framework.core.renderers.interfaces.EJInsertScreenRenderer;
 import org.entirej.framework.core.renderers.interfaces.EJQueryScreenRenderer;
 import org.entirej.framework.core.renderers.interfaces.EJUpdateScreenRenderer;
 
+import com.eclipsesource.tabris.device.ClientDevice;
+import com.eclipsesource.tabris.device.ClientDevice.Platform;
 import com.eclipsesource.tabris.widgets.ClientDialog;
 import com.eclipsesource.tabris.widgets.ClientDialog.ButtonType;
+import com.eclipsesource.tabris.widgets.RefreshComposite;
+import com.eclipsesource.tabris.widgets.RefreshListener;
 
 public class EJTMTMultiRecordBlockRenderer implements EJTMTAppBlockRenderer, KeyListener
 {
@@ -588,6 +590,50 @@ public class EJTMTMultiRecordBlockRenderer implements EJTMTAppBlockRenderer, Key
             
         }
         _mainPane.cleanLayout();
+        
+        Composite tableParent = _mainPane;
+        
+        
+        final String pullRefreshAction = rendererProp.getStringProperty(EJTMTMultiRecordBlockDefinitionProperties.PULL_REFRESH_ACTION);
+        ClientDevice service = RWT.getClient().getService(ClientDevice.class);
+        if(pullRefreshAction!=null && pullRefreshAction.length()>0 &&  service!=null && service.getPlatform() !=Platform.WEB)
+        {
+            
+            final RefreshComposite composite = new RefreshComposite( _mainPane, SWT.NONE );
+            GridLayout layout = new GridLayout(1, false);
+            layout.marginWidth = 0;
+            layout.marginLeft = 0;
+            layout.marginRight = 0;
+            layout.marginHeight = 0;
+            layout.marginBottom = 0;
+            layout.marginTop = 0;
+            composite.setLayout(layout);
+            
+            String refreshMsg = rendererProp.getStringProperty(EJTMTMultiRecordBlockDefinitionProperties.PULL_REFRESH_MESSAGE);
+            if(pullRefreshAction!=null && pullRefreshAction.length()>0)
+            {
+                composite.setMessage( refreshMsg);
+            }
+            else
+            {
+                composite.setMessage( "Refreshing..." );
+            }
+            composite.addRefreshListener( new RefreshListener() {
+              @Override
+              public void refresh() {
+                  
+                  EJDataRecord rec = getFocusedRecord();
+                  if(rec!=null)
+                  {
+                      _block.executeActionCommand(pullRefreshAction, EJScreenType.MAIN);
+                  }
+                  composite.done();
+              }
+            } );
+            composite.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL));
+
+            tableParent= composite;
+        }
 
         int style = SWT.VIRTUAL | SWT.H_SCROLL | SWT.V_SCROLL;
 
@@ -608,7 +654,7 @@ public class EJTMTMultiRecordBlockRenderer implements EJTMTAppBlockRenderer, Key
                 EJItemGroupProperties displayProperties = allItemGroupProperties.iterator().next();
                 if (displayProperties.dispayGroupFrame())
                 {
-                    Group group = new Group(_mainPane, SWT.NONE);
+                    Group group = new Group(tableParent, SWT.NONE);
                     group.setLayout(new FillLayout());
                     if (displayProperties.getFrameTitle() != null && displayProperties.getFrameTitle().length() > 0)
                     {
@@ -641,7 +687,7 @@ public class EJTMTMultiRecordBlockRenderer implements EJTMTAppBlockRenderer, Key
                 else
                 {
 
-                    filterTree = new EJTMTAbstractFilteredTable(_mainPane, style)
+                    filterTree = new EJTMTAbstractFilteredTable(tableParent, style)
                     {
                         @Override
                         public void filter(String filter)
@@ -667,7 +713,7 @@ public class EJTMTMultiRecordBlockRenderer implements EJTMTAppBlockRenderer, Key
             }
             else
             {
-                filterTree = new EJTMTAbstractFilteredTable(_mainPane, style)
+                filterTree = new EJTMTAbstractFilteredTable(tableParent, style)
                 {
                     @Override
                     public void filter(String filter)
@@ -701,7 +747,7 @@ public class EJTMTMultiRecordBlockRenderer implements EJTMTAppBlockRenderer, Key
                 EJItemGroupProperties displayProperties = allItemGroupProperties.iterator().next();
                 if (displayProperties.dispayGroupFrame())
                 {
-                    Group group = new Group(_mainPane, SWT.NONE);
+                    Group group = new Group(tableParent, SWT.NONE);
                     group.setLayout(new FillLayout());
                     if (displayProperties.getFrameTitle() != null && displayProperties.getFrameTitle().length() > 0)
                     {
@@ -712,13 +758,13 @@ public class EJTMTMultiRecordBlockRenderer implements EJTMTAppBlockRenderer, Key
                 }
                 else
                 {
-                    table = new Table(_mainPane, style);
+                    table = new Table(tableParent, style);
                     table.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL));
                 }
             }
             else
             {
-                table = new Table(_mainPane, style);
+                table = new Table(tableParent, style);
                 table.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL));
             }
 
@@ -727,6 +773,8 @@ public class EJTMTMultiRecordBlockRenderer implements EJTMTAppBlockRenderer, Key
 
         table.setLinesVisible(true);
 
+        
+        
         EJTMTTableViewerColumnFactory factory = new EJTMTTableViewerColumnFactory(_tableViewer);
         ColumnViewerToolTipSupport.enableFor(_tableViewer);
 

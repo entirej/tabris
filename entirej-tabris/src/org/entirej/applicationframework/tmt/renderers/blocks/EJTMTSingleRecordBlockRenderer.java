@@ -20,6 +20,7 @@ package org.entirej.applicationframework.tmt.renderers.blocks;
 
 import java.util.Collection;
 
+import org.eclipse.rap.rwt.RWT;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -29,6 +30,7 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -39,6 +41,7 @@ import org.entirej.applicationframework.tmt.application.EJTMTImageRetriever;
 import org.entirej.applicationframework.tmt.layout.EJTMTEntireJGridPane;
 import org.entirej.applicationframework.tmt.renderer.interfaces.EJTMTAppBlockRenderer;
 import org.entirej.applicationframework.tmt.renderer.interfaces.EJTMTAppItemRenderer;
+import org.entirej.applicationframework.tmt.renderers.blocks.definition.interfaces.EJTMTMultiRecordBlockDefinitionProperties;
 import org.entirej.applicationframework.tmt.renderers.blocks.definition.interfaces.EJTMTSingleRecordBlockDefinitionProperties;
 import org.entirej.applicationframework.tmt.renderers.screen.EJTMTInsertScreenRenderer;
 import org.entirej.applicationframework.tmt.renderers.screen.EJTMTQueryScreenRenderer;
@@ -71,7 +74,11 @@ import org.entirej.framework.core.renderers.registry.EJMainScreenItemRendererReg
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.eclipsesource.tabris.device.ClientDevice;
+import com.eclipsesource.tabris.device.ClientDevice.Platform;
 import com.eclipsesource.tabris.widgets.ClientDialog;
+import com.eclipsesource.tabris.widgets.RefreshComposite;
+import com.eclipsesource.tabris.widgets.RefreshListener;
 import com.eclipsesource.tabris.widgets.ClientDialog.ButtonType;
 
 public class EJTMTSingleRecordBlockRenderer implements EJTMTAppBlockRenderer, KeyListener
@@ -602,6 +609,51 @@ public class EJTMTSingleRecordBlockRenderer implements EJTMTAppBlockRenderer, Ke
 
         hookFocusListener(_mainPane);
         _mainPane.cleanLayout();
+        Composite tableParent = _mainPane;
+        
+        
+        final String pullRefreshAction = brendererProperties.getStringProperty(EJTMTMultiRecordBlockDefinitionProperties.PULL_REFRESH_ACTION);
+        ClientDevice service = RWT.getClient().getService(ClientDevice.class);
+        if(pullRefreshAction!=null && pullRefreshAction.length()>0 && service!=null && service.getPlatform() !=Platform.WEB)
+        {
+            
+            final RefreshComposite composite = new RefreshComposite( _mainPane, SWT.NONE );
+            GridLayout layout = new GridLayout(1, false);
+            layout.marginWidth = 0;
+            layout.marginLeft = 0;
+            layout.marginRight = 0;
+            layout.marginHeight = 0;
+            layout.marginBottom = 0;
+            layout.marginTop = 0;
+            composite.setLayout(layout);
+            
+            String refreshMsg = brendererProperties.getStringProperty(EJTMTMultiRecordBlockDefinitionProperties.PULL_REFRESH_MESSAGE);
+            if(pullRefreshAction!=null && pullRefreshAction.length()>0)
+            {
+                composite.setMessage( refreshMsg);
+            }
+            else
+            {
+                composite.setMessage( "Refreshing..." );
+            }
+            composite.addRefreshListener( new RefreshListener() {
+              @Override
+              public void refresh() {
+                  
+                  EJDataRecord rec = getFocusedRecord();
+                  if(rec!=null)
+                  {
+                      _block.executeActionCommand(pullRefreshAction, EJScreenType.MAIN);
+                  }
+                  composite.done();
+              }
+            } );
+            composite.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL));
+
+            tableParent= composite;
+        }
+        
+        
         EJDataRecord registeredRecord = _mainItemRegister.getRegisteredRecord();
         _mainItemRegister.resetRegister();
 
@@ -609,7 +661,7 @@ public class EJTMTSingleRecordBlockRenderer implements EJTMTAppBlockRenderer, Ke
         Collection<EJItemGroupProperties> itemGroupProperties = container.getAllItemGroupProperties();
         for (EJItemGroupProperties ejItemGroupProperties : itemGroupProperties)
         {
-            createItemGroup(_mainPane, ejItemGroupProperties);
+            createItemGroup(tableParent, ejItemGroupProperties);
         }
         
         _mainItemRegister.clearRegisteredValues();

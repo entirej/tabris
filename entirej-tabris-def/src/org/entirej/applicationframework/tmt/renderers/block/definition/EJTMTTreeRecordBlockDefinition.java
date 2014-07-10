@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.entirej.applicationframework.tmt.renderers.block.definition.interfaces.EJTMTMultiRecordBlockDefinitionProperties;
 import org.entirej.applicationframework.tmt.renderers.block.definition.interfaces.EJTMTTreeBlockDefinitionProperties;
 import org.entirej.applicationframework.tmt.renderers.screen.definition.EJTMTInsertScreenRendererDefinition;
 import org.entirej.applicationframework.tmt.renderers.screen.definition.EJTMTQueryScreenRendererDefinition;
@@ -128,6 +129,18 @@ public class EJTMTTreeRecordBlockDefinition implements EJDevBlockRendererDefinit
         doubleClickActionCommand.setLabel("Double Click Action Command");
         doubleClickActionCommand.setDescription("Add an action command that will be sent to the action processor when a user double clicks on this block");
 
+        EJDevPropertyDefinition pullRefreshActionCommand = new EJDevPropertyDefinition(EJTMTMultiRecordBlockDefinitionProperties.PULL_REFRESH_ACTION,
+                EJPropertyDefinitionType.ACTION_COMMAND);
+        pullRefreshActionCommand.setLabel("Pull-Refresh Action Command");
+        pullRefreshActionCommand.setDescription("Add an action command that will be sent to the action processor when a user Pull-Refresh in Block");
+        
+        EJDevPropertyDefinition pullRefreshmsg = new EJDevPropertyDefinition(EJTMTMultiRecordBlockDefinitionProperties.PULL_REFRESH_MESSAGE,
+                EJPropertyDefinitionType.STRING);
+        pullRefreshmsg.setLabel("Pull-Refresh Message");
+        pullRefreshmsg.setDescription("Add a message that will be shown when a user Pull-Refresh in Block");
+        
+        
+        
         EJDevPropertyDefinition showTableBorder = new EJDevPropertyDefinition(EJTMTTreeBlockDefinitionProperties.HIDE_TREE_BORDER,
                 EJPropertyDefinitionType.BOOLEAN);
         showTableBorder.setLabel("Hide Tree Border");
@@ -172,6 +185,8 @@ public class EJTMTTreeRecordBlockDefinition implements EJDevBlockRendererDefinit
         mainGroup.addPropertyDefinition(imageItem);
         mainGroup.addPropertyDefinition(expandLevel);
         mainGroup.addPropertyDefinition(doubleClickActionCommand);
+        mainGroup.addPropertyDefinition(pullRefreshActionCommand);
+        mainGroup.addPropertyDefinition(pullRefreshmsg);
         mainGroup.addPropertyDefinition(showTableBorder);
         mainGroup.addPropertyDefinition(filter);
 

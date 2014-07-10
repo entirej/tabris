@@ -70,14 +70,11 @@ import org.entirej.applicationframework.tmt.renderers.screen.EJTMTUpdateScreenRe
 import org.entirej.applicationframework.tmt.table.EJTMTAbstractFilteredTree;
 import org.entirej.applicationframework.tmt.table.EJTMTAbstractFilteredTree.FilteredContentProvider;
 import org.entirej.applicationframework.tmt.utils.EJTMTVisualAttributeUtils;
-import org.entirej.framework.core.EJForm;
 import org.entirej.framework.core.EJMessage;
 import org.entirej.framework.core.data.EJDataRecord;
 import org.entirej.framework.core.data.controllers.EJEditableBlockController;
-import org.entirej.framework.core.data.controllers.EJQuestion;
 import org.entirej.framework.core.enumerations.EJManagedBlockProperty;
 import org.entirej.framework.core.enumerations.EJManagedScreenProperty;
-import org.entirej.framework.core.enumerations.EJQuestionButton;
 import org.entirej.framework.core.enumerations.EJScreenType;
 import org.entirej.framework.core.interfaces.EJScreenItemController;
 import org.entirej.framework.core.internal.EJInternalEditableBlock;
@@ -96,6 +93,8 @@ import org.entirej.framework.core.renderers.interfaces.EJUpdateScreenRenderer;
 
 import com.eclipsesource.tabris.widgets.ClientDialog;
 import com.eclipsesource.tabris.widgets.ClientDialog.ButtonType;
+import com.eclipsesource.tabris.widgets.RefreshListener;
+import com.eclipsesource.tabris.widgets.enhancement.RefreshHandler;
 import com.eclipsesource.tabris.widgets.enhancement.TreeDecorator;
 import com.eclipsesource.tabris.widgets.enhancement.Widgets;
 
@@ -729,6 +728,41 @@ public class EJTMTTreeRecordBlockRenderer implements EJTMTAppBlockRenderer, KeyL
         }
         TreeDecorator onTree = Widgets.onTree(_tableViewer.getTree());
         onTree.enableBackButtonNavigation();
+        
+        final String pullRefreshAction = rendererProp.getStringProperty(EJTMTMultiRecordBlockDefinitionProperties.PULL_REFRESH_ACTION);
+        if(pullRefreshAction!=null && pullRefreshAction.length()>0)
+        {
+            
+           final  RefreshHandler handler = new RefreshHandler();
+            String refreshMsg = rendererProp.getStringProperty(EJTMTMultiRecordBlockDefinitionProperties.PULL_REFRESH_MESSAGE);
+           
+          
+            
+            if(refreshMsg!=null && refreshMsg.length()>0)
+            {
+                handler.setMessage( refreshMsg);
+            }
+            else
+            {
+                handler.setMessage( "Refreshing..." );
+            }
+            handler.addRefreshListener( new RefreshListener() {
+              @Override
+              public void refresh() {
+                  EJDataRecord rec = getFocusedRecord();
+                  if(rec!=null)
+                  {
+                      _block.executeActionCommand(pullRefreshAction, EJScreenType.MAIN);
+                  }
+                  handler.done();
+              }
+            } );
+            Widgets.onTree( table ).setRefreshHandler( handler );
+            
+            
+            
+            
+        }
         
         
         int rowheight = rendererProp.getIntProperty(EJTMTMultiRecordBlockDefinitionProperties.ROW_HEIGHT, 0);

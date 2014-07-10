@@ -49,4 +49,8 @@ public interface EJTMTMultiRecordBlockDefinitionProperties
     public static final String VISUAL_ATTRIBUTE_PROPERTY   = "VISUAL_ATTRIBUTE";
 
     public static final String FILTER                      = "FILTER";
+    
+    
+    public static final String PULL_REFRESH_ACTION       = "PULL_REFRESH";
+    public static final String PULL_REFRESH_MESSAGE      = "PULL_REFRESH_MSG";
 }

@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.entirej.applicationframework.tmt.renderers.block.definition.interfaces.EJTMTMultiRecordBlockDefinitionProperties;
 import org.entirej.applicationframework.tmt.renderers.block.definition.interfaces.EJTMTSingleRecordBlockDefinitionProperties;
 import org.entirej.applicationframework.tmt.renderers.screen.definition.EJTMTInsertScreenRendererDefinition;
 import org.entirej.applicationframework.tmt.renderers.screen.definition.EJTMTQueryScreenRendererDefinition;
@@ -75,7 +76,19 @@ public class EJTMTSingleRecordBlockDefinition implements EJDevBlockRendererDefin
     public EJPropertyDefinitionGroup getBlockPropertyDefinitionGroup()
     {
         EJDevPropertyDefinitionGroup mainGroup = new EJDevPropertyDefinitionGroup("Single-Record Block");
-
+        
+        EJDevPropertyDefinition pullRefreshmsg = new EJDevPropertyDefinition(EJTMTMultiRecordBlockDefinitionProperties.PULL_REFRESH_MESSAGE,
+                EJPropertyDefinitionType.STRING);
+        pullRefreshmsg.setLabel("Pull-Refresh Message");
+        pullRefreshmsg.setDescription("Add a message that will be shown when a user Pull-Refresh in Block");
+        
+        EJDevPropertyDefinition pullRefreshActionCommand = new EJDevPropertyDefinition(EJTMTMultiRecordBlockDefinitionProperties.PULL_REFRESH_ACTION,
+                EJPropertyDefinitionType.ACTION_COMMAND);
+        pullRefreshActionCommand.setLabel("Pull-Refresh Action Command");
+        pullRefreshActionCommand.setDescription("Add an action command that will be sent to the action processor when a user Pull-Refresh in Block");
+      
+        mainGroup.addPropertyDefinition(pullRefreshActionCommand);
+        mainGroup.addPropertyDefinition(pullRefreshmsg);
         
         return mainGroup;
     }
