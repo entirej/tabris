@@ -226,7 +226,7 @@ public class EJTMTDateTimeItemRenderer implements EJTMTAppItemRenderer, FocusLis
             Calendar date = _dateFormat.getCalendar();
             date.setTime((Date) d);
             dateTime.setDate(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
-            dateTime.setTime(date.get(Calendar.HOUR), date.get(Calendar.MINUTE), date.get(Calendar.SECOND));
+            dateTime.setTime(date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE), date.get(Calendar.SECOND));
         }
     }
 
@@ -238,7 +238,7 @@ public class EJTMTDateTimeItemRenderer implements EJTMTAppItemRenderer, FocusLis
             date.set(Calendar.YEAR, _textField.getYear());
             date.set(Calendar.MONTH, _textField.getMonth());
             date.set(Calendar.DAY_OF_MONTH, _textField.getDay());
-            date.set(Calendar.HOUR, _textField.getHours());
+            date.set(Calendar.HOUR_OF_DAY, _textField.getHours());
             date.set(Calendar.MINUTE, _textField.getMinutes());
             date.set(Calendar.SECOND, _textField.getSeconds());
             date.set(Calendar.MILLISECOND, 0);
