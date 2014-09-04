@@ -200,6 +200,12 @@ public class EJTMTFormRenderer implements EJTMTAppFormRenderer
             }
         }
     }
+    @Override
+    public void setTabPageVisible(String tabCanvasName, String tabPageName, boolean visible)
+    {
+        //TODO:
+        
+    }
 
     @Override
     public void createControl(final Composite parent)
