@@ -924,14 +924,14 @@ public class EJTMTComboItemRenderer implements EJTMTAppItemRenderer, FocusListen
                         EJDataRecord record = controller.getFocusedRecord();
                         if (record == null)
                         {
-                            return;
+                            break;
                         }
 
                         if (record.containsItem(itemName))
                         {
                             record.setValue(itemName, _returnItemValues.get(itemName));
                         }
-                        return;
+                        break;
                     case INSERT:
                         abstractScreenRenderer = (EJTMTAbstractScreenRenderer) controller.getManagedInsertScreenRenderer().getUnmanagedRenderer();
                         break;
