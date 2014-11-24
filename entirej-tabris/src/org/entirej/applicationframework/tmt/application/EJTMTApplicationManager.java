@@ -352,4 +352,17 @@ public class EJTMTApplicationManager implements EJApplicationManager, Serializab
         _frameworkManager.openForm(formName);
         
     }
+    
+    @Override
+    public void runReport(String reportName)
+    {
+        throw new RuntimeException("not supported yet");
+        
+    }
+    
+    public void runReport(String reportName, EJParameterList parameterList) {
+        
+        throw new RuntimeException("not supported yet");
+        
+    };
 }
