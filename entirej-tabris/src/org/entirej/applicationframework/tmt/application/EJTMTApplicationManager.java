@@ -364,5 +364,19 @@ public class EJTMTApplicationManager implements EJApplicationManager, Serializab
         
         throw new RuntimeException("not supported yet");
         
+    }
+
+    @Override
+    public String generateReport(String reportName, EJParameterList parameterList)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String generateReport(String reportName)
+    {
+        // TODO Auto-generated method stub
+        return null;
     };
 }
