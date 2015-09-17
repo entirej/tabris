@@ -311,6 +311,8 @@ public class EJTMTScreenPage extends AbstractPage
         {
 
         }
+        
+        public  abstract void setButtonEnable(int id, boolean state);
 
         public void close()
         {

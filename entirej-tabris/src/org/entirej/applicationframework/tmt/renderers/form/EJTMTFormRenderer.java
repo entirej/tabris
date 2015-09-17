@@ -34,7 +34,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
@@ -743,6 +743,14 @@ public class EJTMTFormRenderer implements EJTMTAppFormRenderer
 
         final EJCanvasProperties canvasProperties;
         final EJCanvasController canvasController;
+        
+        final int ID_BUTTON_1 = 1;
+        final int ID_BUTTON_2 = 2;
+        final int ID_BUTTON_3 = 3;
+        
+        boolean                       popupButton1 = true;
+        boolean                       popupButton2 = true;
+        boolean                       popupButton3 = true;
 
         public PopupCanvasHandler(EJCanvasProperties canvasProperties, EJCanvasController canvasController)
         {
@@ -768,9 +776,7 @@ public class EJTMTFormRenderer implements EJTMTAppFormRenderer
             final String button2Label = canvasProperties.getButtonTwoText();
             final String button3Label = canvasProperties.getButtonThreeText();
 
-            final int ID_BUTTON_1 = 1;
-            final int ID_BUTTON_2 = 2;
-            final int ID_BUTTON_3 = 3;
+       
 
             _popupDialog = new EJTMTScreenPage.Context()
             {
@@ -804,6 +810,24 @@ public class EJTMTFormRenderer implements EJTMTAppFormRenderer
                     addExtraButton(parent, button3Label, ID_BUTTON_3);
                     addExtraButton(parent, button2Label, ID_BUTTON_2);
                     addExtraButton(parent, button1Label, ID_BUTTON_1);
+                    
+
+                    setButtonEnable(ID_BUTTON_1, popupButton1);
+                    setButtonEnable(ID_BUTTON_2, popupButton2);
+                    setButtonEnable(ID_BUTTON_3, popupButton3);
+                }
+
+                public void setButtonEnable(int id, boolean state)
+                {
+                   if(page!=null)
+                   {
+                       Button button = page.getButton(id);
+                       if(button!=null && !button.isDisposed())
+                       {
+                           button.setEnabled(state);
+                       }
+                   }
+                    
                 }
 
                 @Override
@@ -909,6 +933,51 @@ public class EJTMTFormRenderer implements EJTMTAppFormRenderer
         {
             return EJCanvasType.POPUP;
         }
+        
+        public void enableButton(EJPopupButton button, boolean state)
+        {
+            switch (button)
+            {
+                case ONE:
+                    popupButton1 = state;
+                    if (_popupDialog != null)
+                        _popupDialog.setButtonEnable(ID_BUTTON_1, popupButton1);
+
+                    break;
+                case TWO:
+                    popupButton2 = state;
+                    if (_popupDialog != null)
+                        _popupDialog.setButtonEnable(ID_BUTTON_2, popupButton2);
+                    break;
+                case THREE:
+                    popupButton3 = state;
+                    if (_popupDialog != null)
+                        _popupDialog.setButtonEnable(ID_BUTTON_3, popupButton3);
+                    break;
+
+                default:
+                    break;
+            }
+
+        }
+
+        public boolean isButtonEnabled(EJPopupButton button)
+        {
+            switch (button)
+            {
+                case ONE:
+                    return popupButton1;
+                case TWO:
+                    return popupButton2;
+                case THREE:
+                    return popupButton3;
+
+                default:
+                    break;
+            }
+            return false;
+        }
+        
     }
 
     class EJTabFolder
@@ -1002,14 +1071,41 @@ public class EJTMTFormRenderer implements EJTMTAppFormRenderer
     @Override
     public void clearCanvasMessages(String canvasName)
     {
-        // TODO Auto-generated method stub
+        throw new IllegalStateException("not support yet");
         
     }
 
     @Override
     public void setCanvasMessages(String canvasName, Collection<EJMessage> messages)
     {
-        // TODO Auto-generated method stub
+        throw new IllegalStateException("not support yet");
         
     }
+    
+    
+    @Override
+    public void enableButton(String canvasName, EJPopupButton button, boolean state)
+    {
+        CanvasHandler canvasHandler = _canvases.get(canvasName);
+        if (canvasHandler instanceof PopupCanvasHandler)
+        {
+            PopupCanvasHandler popupCanvasHandler = (PopupCanvasHandler) canvasHandler;
+            popupCanvasHandler.enableButton(button, state);
+        }
+
+    }
+
+    @Override
+    public boolean isButtonEnabled(String canvasName, EJPopupButton button)
+    {
+        CanvasHandler canvasHandler = _canvases.get(canvasName);
+        if (canvasHandler instanceof PopupCanvasHandler)
+        {
+            PopupCanvasHandler popupCanvasHandler = (PopupCanvasHandler) canvasHandler;
+            return popupCanvasHandler.isButtonEnabled(button);
+        }
+        return false;
+    }
+    
+    
 }

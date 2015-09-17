@@ -283,6 +283,19 @@ public class EJTMTInsertScreenRenderer extends EJTMTAbstractScreenRenderer imple
 
         _insertDialog = new EJTMTScreenPage.Context()
         {
+            
+            public void setButtonEnable(int id, boolean state)
+            {
+               if(page!=null)
+               {
+                   Button button = page.getButton(id);
+                   if(button!=null && !button.isDisposed())
+                   {
+                       button.setEnabled(state);
+                   }
+               }
+                
+            }
             @Override
             public void createBody(Composite parent)
             {

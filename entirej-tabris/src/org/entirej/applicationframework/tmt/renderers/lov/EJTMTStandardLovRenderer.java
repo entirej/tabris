@@ -42,6 +42,7 @@ import org.eclipse.rap.rwt.template.ImageCell.ScaleMode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
@@ -159,8 +160,25 @@ public class EJTMTStandardLovRenderer implements EJLovRenderer
         int width = _lovController.getDefinitionProperties().getWidth();
         int height = _lovController.getDefinitionProperties().getHeight();
 
+        
+        
+        
         _dialog = new EJTMTScreenPage.Context()
         {
+            
+            public void setButtonEnable(int id, boolean state)
+            {
+               if(page!=null)
+               {
+                   Button button = page.getButton(id);
+                   if(button!=null && !button.isDisposed())
+                   {
+                       button.setEnabled(state);
+                   }
+               }
+                
+            }
+            
             private static final long serialVersionUID = -4685316941898120169L;
 
             @Override

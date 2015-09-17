@@ -282,6 +282,19 @@ public class EJTMTQueryScreenRenderer extends EJTMTAbstractScreenRenderer implem
         {
             private static final long serialVersionUID = -4685316941898120169L;
 
+            public void setButtonEnable(int id, boolean state)
+            {
+               if(page!=null)
+               {
+                   Button button = page.getButton(id);
+                   if(button!=null && !button.isDisposed())
+                   {
+                       button.setEnabled(state);
+                   }
+               }
+                
+            }
+            
             @Override
             public void createBody(Composite parent)
             {
